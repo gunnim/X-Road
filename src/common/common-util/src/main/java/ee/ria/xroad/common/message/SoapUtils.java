@@ -28,10 +28,10 @@ package ee.ria.xroad.common.message;
 import ee.ria.xroad.common.CodedException;
 import ee.ria.xroad.common.util.CryptoUtils;
 
+import jakarta.xml.bind.annotation.XmlElement;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.ObjectUtils;
 
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.namespace.QName;
 import javax.xml.soap.MessageFactory;
 import javax.xml.soap.MimeHeaders;
@@ -269,7 +269,7 @@ public final class SoapUtils {
                         request.getBytes()), charset);
 
         List<SOAPElement> bodyChildren = getChildElements(soap.getSOAPBody());
-        if (bodyChildren.size() == 0) {
+        if (bodyChildren.isEmpty()) {
             return null;
         }
 

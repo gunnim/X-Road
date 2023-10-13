@@ -34,6 +34,11 @@ import ee.ria.xroad.common.metadata.ObjectFactory;
 import ee.ria.xroad.common.util.MimeTypes;
 import ee.ria.xroad.common.util.XmlUtils;
 
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBElement;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Marshaller;
+import jakarta.xml.bind.Unmarshaller;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 import org.hibernate.query.Query;
@@ -52,11 +57,6 @@ import javax.wsdl.Definition;
 import javax.wsdl.Port;
 import javax.wsdl.Service;
 import javax.wsdl.extensions.soap.SOAPAddress;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -324,11 +324,10 @@ public final class MetaserviceTestUtil {
     }
 
     /** Clean the database (You are using this from a test, right?)
-     * @throws Exception
      */
     public static void cleanDB() throws Exception {
         doInTransaction(session -> {
-            Query q = session.createSQLQuery("TRUNCATE SCHEMA public AND COMMIT");
+            Query q = session.createNativeQuery("TRUNCATE SCHEMA public AND COMMIT");
             q.executeUpdate();
             return null;
         });

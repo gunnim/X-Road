@@ -31,8 +31,8 @@ import ee.ria.xroad.common.conf.globalconf.privateparameters.v2.PrivateParameter
 
 import lombok.Getter;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
 
 import java.nio.file.Path;
 import java.time.OffsetDateTime;

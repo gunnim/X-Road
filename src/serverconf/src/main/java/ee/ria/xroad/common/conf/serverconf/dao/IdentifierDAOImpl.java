@@ -28,40 +28,18 @@ package ee.ria.xroad.common.conf.serverconf.dao;
 import ee.ria.xroad.common.identifier.ClientId;
 import ee.ria.xroad.common.identifier.XRoadId;
 
-import org.hibernate.Criteria;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import org.hibernate.Session;
-import org.hibernate.criterion.Example;
-
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 
 import java.util.List;
-
-import static ee.ria.xroad.common.conf.serverconf.ServerConfDatabaseCtx.get;
 
 /**
  * Identifier data access object implementation.
  */
 public class IdentifierDAOImpl extends AbstractDAOImpl<XRoadId.Conf> {
-
-    /**
-     * Returns the identifier.
-     * @param example the example type
-     * @param <T>     the type of the example
-     * @return the identifier
-     * @throws Exception if an error occurs
-     * @deprecated Only used by the admin ui from ruby code, to be removed
-     */
-    @SuppressWarnings("unchecked")
-    @Deprecated
-    public static <T extends XRoadId> T getIdentifier(T example) {
-        Criteria criteria =
-                get().getSession().createCriteria(example.getClass());
-        criteria.add(Example.create(example));
-        return (T)criteria.uniqueResult();
-    }
 
     /**
      * Finds a (local) client identifier corresponding the example or null if none exits
