@@ -8,7 +8,9 @@
     <class name="OperationalDataRecord" table="operational_data">
 
         <id name="id" type="long">
-            <generator class="seqhilo"/>
+            <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+                <param name="optimizer">hilo</param>
+            </generator>
         </id>
 
         <!-- Indexes are created for fields that are mandatory in the request
