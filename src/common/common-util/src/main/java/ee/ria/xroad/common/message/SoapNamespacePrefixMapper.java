@@ -25,6 +25,7 @@
  */
 package ee.ria.xroad.common.message;
 
+
 import org.glassfish.jaxb.runtime.marshaller.NamespacePrefixMapper;
 
 /**

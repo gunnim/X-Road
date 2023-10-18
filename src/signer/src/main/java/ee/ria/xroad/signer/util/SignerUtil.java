@@ -36,8 +36,6 @@ import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
 import org.bouncycastle.cert.jcajce.JcaX509v3CertificateBuilder;
 import org.bouncycastle.operator.ContentSigner;
 
-import javax.xml.bind.DatatypeConverter;
-
 import java.math.BigInteger;
 import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
@@ -87,19 +85,11 @@ public final class SignerUtil {
      * @throws NoSuchAlgorithmException if the algorithm is not supported
      */
     public static byte[] createDataToSign(byte[] digest, String signAlgoId) throws NoSuchAlgorithmException {
-        switch (signAlgoId) {
-            case SHA256WITHRSAANDMGF1_ID:
-            case SHA384WITHRSAANDMGF1_ID:
-            case SHA512WITHRSAANDMGF1_ID:
-                return digest; // Nothing to do
-            case SHA1WITHRSA_ID:
-            case SHA256WITHRSA_ID:
-            case SHA384WITHRSA_ID:
-            case SHA512WITHRSA_ID:
-                return createDataToSign(digest);
-            default:
-                throw new NoSuchAlgorithmException("Unknown sign algorithm id: " + signAlgoId);
-        }
+        return switch (signAlgoId) {
+            case SHA256WITHRSAANDMGF1_ID, SHA384WITHRSAANDMGF1_ID, SHA512WITHRSAANDMGF1_ID -> digest; // Nothing to do
+            case SHA1WITHRSA_ID, SHA256WITHRSA_ID, SHA384WITHRSA_ID, SHA512WITHRSA_ID -> createDataToSign(digest);
+            default -> throw new NoSuchAlgorithmException("Unknown sign algorithm id: " + signAlgoId);
+        };
 
     }
 

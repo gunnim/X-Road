@@ -56,7 +56,7 @@ public final class JaxbUtils {
     public static Marshaller createMarshaller(Class<?> clazz,
                                               NamespacePrefixMapper mpr) throws Exception {
         Marshaller marshaller = createMarshaller(clazz);
-        marshaller.setProperty("com.sun.xml.bind.namespacePrefixMapper", mpr);
+        marshaller.setProperty("org.glassfish.jaxb.namespacePrefixMapper", mpr);
         marshaller.setProperty(Marshaller.JAXB_FRAGMENT, Boolean.TRUE);
         return marshaller;
     }
