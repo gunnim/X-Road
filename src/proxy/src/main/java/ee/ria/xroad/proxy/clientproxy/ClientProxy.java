@@ -46,7 +46,7 @@ import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
-import org.eclipse.jetty.http.HttpComplianceSection;
+import org.eclipse.jetty.http.UriCompliance;
 import org.eclipse.jetty.server.CustomRequestLog;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.HttpConnectionFactory;
@@ -80,6 +80,8 @@ import static ee.ria.xroad.proxy.clientproxy.HandlerLoader.loadHandler;
 @Slf4j
 public class ClientProxy implements StartStop {
 
+    private static final UriCompliance LEGACY_WITHOUT_PATH_SEP = UriCompliance.LEGACY.
+            without("LEGACY_WITHOUT_PATH_SEPARATOR", UriCompliance.Violation.AMBIGUOUS_PATH_SEPARATOR);
     private static final int ACCEPTOR_COUNT = Runtime.getRuntime().availableProcessors();
 
     // SSL session timeout
@@ -239,7 +241,7 @@ public class ClientProxy implements StartStop {
                 .map(cf -> (HttpConnectionFactory)cf)
                 .forEach(cf -> {
                     //allowed so that x-road identifiers with a '/' can be encoded to a path segment using %2F
-                    cf.getHttpCompliance().sections().remove(HttpComplianceSection.NO_AMBIGUOUS_PATH_SEGMENTS);
+                    cf.getHttpConfiguration().setUriCompliance(LEGACY_WITHOUT_PATH_SEP);
                     cf.getHttpConfiguration().setSendServerVersion(false);
                 });
     }

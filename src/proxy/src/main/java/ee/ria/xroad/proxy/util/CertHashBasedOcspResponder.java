@@ -31,6 +31,9 @@ import ee.ria.xroad.common.util.MimeUtils;
 import ee.ria.xroad.common.util.StartStop;
 import ee.ria.xroad.proxy.conf.KeyConf;
 
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.cert.ocsp.OCSPResp;
 import org.eclipse.jetty.server.HttpConnectionFactory;
@@ -39,15 +42,10 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.eclipse.jetty.util.MultiPartOutputStream;
+import org.eclipse.jetty.util.resource.Resource;
 import org.eclipse.jetty.xml.XmlConfiguration;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -97,8 +95,7 @@ public class CertHashBasedOcspResponder implements StartStop {
         Path file = Paths.get(SystemProperties.getJettyOcspResponderConfFile());
 
         log.debug("Configuring server from {}", file);
-
-        try (InputStream in = Files.newInputStream(file)) {
+        try (Resource in = Resource.newResource(file)) {
             new XmlConfiguration(in).configure(server);
         }
     }

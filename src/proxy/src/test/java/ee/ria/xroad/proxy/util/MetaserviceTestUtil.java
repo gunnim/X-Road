@@ -34,6 +34,8 @@ import ee.ria.xroad.common.metadata.ObjectFactory;
 import ee.ria.xroad.common.util.MimeTypes;
 import ee.ria.xroad.common.util.XmlUtils;
 
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.WriteListener;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBElement;
 import jakarta.xml.bind.JAXBException;
@@ -50,8 +52,6 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import javax.servlet.ServletOutputStream;
-import javax.servlet.WriteListener;
 import javax.wsdl.BindingOperation;
 import javax.wsdl.Definition;
 import javax.wsdl.Port;

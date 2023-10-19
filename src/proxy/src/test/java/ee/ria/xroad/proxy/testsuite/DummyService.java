@@ -31,6 +31,9 @@ import ee.ria.xroad.common.TestCertUtil.PKCS12;
 import ee.ria.xroad.common.util.CryptoUtils;
 import ee.ria.xroad.common.util.StartStop;
 
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.ByteOrderMark;
 import org.apache.commons.io.IOUtils;
@@ -47,9 +50,6 @@ import javax.net.ssl.SSLEngine;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509ExtendedKeyManager;
 import javax.net.ssl.X509TrustManager;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import java.io.FileInputStream;
 import java.io.IOException;

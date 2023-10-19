@@ -37,11 +37,10 @@ import ee.ria.xroad.proxy.testutil.TestGlobalConf;
 import ee.ria.xroad.proxy.testutil.TestServerConf;
 import ee.ria.xroad.proxy.testutil.TestService;
 
+import jakarta.servlet.ServletOutputStream;
 import lombok.extern.slf4j.Slf4j;
 import org.hamcrest.Matchers;
 import org.junit.Test;
-
-import javax.servlet.ServletOutputStream;
 
 import java.io.IOException;
 import java.io.InputStream;

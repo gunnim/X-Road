@@ -45,11 +45,10 @@ import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.Slf4jRequestLogWriter;
 import org.eclipse.jetty.server.handler.HandlerCollection;
 import org.eclipse.jetty.server.handler.RequestLogHandler;
+import org.eclipse.jetty.util.resource.Resource;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.xml.XmlConfiguration;
 
-import java.io.InputStream;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -113,7 +112,7 @@ public class ServerProxy implements StartStop {
 
         log.debug("Configuring server from {}", file);
 
-        try (InputStream in = Files.newInputStream(file)) {
+        try (Resource in = Resource.newResource(file)) {
             new XmlConfiguration(in).configure(server);
         }
     }
@@ -220,7 +219,7 @@ public class ServerProxy implements StartStop {
     }
 
     private static ServerConnector createClientProxySslConnector(Server server) throws Exception {
-        SslContextFactory.Server cf = new SslContextFactory.Server();
+        var cf = new SslContextFactory.Server();
         cf.setNeedClientAuth(true);
         cf.setIncludeProtocols(CryptoUtils.SSL_PROTOCOL);
         cf.setIncludeCipherSuites(SystemProperties.getXroadTLSCipherSuites());
