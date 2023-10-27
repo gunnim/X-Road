@@ -35,6 +35,8 @@ import ee.ria.xroad.proxy.testsuite.TestSuiteGlobalConf;
 import ee.ria.xroad.proxy.testsuite.TestSuiteKeyConf;
 import ee.ria.xroad.proxy.util.MetaserviceTestUtil;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
@@ -44,9 +46,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.ArgumentCaptor;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.util.Arrays;

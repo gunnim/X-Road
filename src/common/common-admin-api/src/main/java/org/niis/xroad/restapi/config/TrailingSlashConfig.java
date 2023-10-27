@@ -1,4 +1,4 @@
-/*
+/**
  * The MIT License
  * <p>
  * Copyright (c) 2019- Nordic Institute for Interoperability Solutions (NIIS)
@@ -24,43 +24,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.niis.xroad.cs.admin.core.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
+package org.niis.xroad.restapi.config;
 
-@Entity
-@Table(name = UiUserEntity.TABLE_NAME)
-public class UiUserEntity extends AuditableEntity {
+import jakarta.servlet.Filter;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
-    public static final String TABLE_NAME = "ui_users";
+@Configuration
+public class TrailingSlashConfig {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = TABLE_NAME + "_id_seq")
-    @SequenceGenerator(name = TABLE_NAME + "_id_seq", sequenceName = TABLE_NAME + "_id_seq", allocationSize = 1)
-    @Column(name = "id", unique = true, nullable = false)
-    @Getter
-    private int id;
-
-    @Column(name = "username")
-    @Getter
-    @Setter
-    private String username;
-
-    @Column(name = "locale")
-    @Getter
-    @Setter
-    private String locale;
-
-    protected UiUserEntity() {
-        //JPA
+    @Bean
+    public Filter trailingSlashRedirectFilter() {
+        return new TrailingSlashRedirectFilter();
     }
 
+    @Bean
+    public FilterRegistrationBean<Filter> trailingSlashFilter() {
+        FilterRegistrationBean<Filter> registrationBean = new FilterRegistrationBean<>();
+        registrationBean.setFilter(trailingSlashRedirectFilter());
+        registrationBean.addUrlPatterns("/*");
+        return registrationBean;
+    }
 }

@@ -29,6 +29,7 @@ import ee.ria.xroad.common.conf.globalconf.GlobalConf;
 import ee.ria.xroad.signer.protocol.dto.TokenInfo;
 import ee.ria.xroad.signer.tokenmanager.TokenManager;
 
+import jakarta.xml.bind.DatatypeConverter;
 import lombok.SneakyThrows;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.cert.X509CertificateHolder;

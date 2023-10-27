@@ -42,7 +42,7 @@ openApiGenerate {
         supportingFiles        : 'ApiUtil.java'
     ]
     configOptions = [
-        "useJakartaEe": "true",
+      useJakartaEe: "true",
         interfaceOnly       : "true",
         useTags             : "true",
         documentationProvider  : "none",

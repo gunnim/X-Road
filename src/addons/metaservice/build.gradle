@@ -10,7 +10,7 @@ dependencies {
     testImplementation project (path: ":proxy", configuration: 'testArtifacts')
 
     testImplementation "org.eclipse.jetty:jetty-servlet:$jettyVersion"
-    testImplementation ('com.github.tomakehurst:wiremock:2.27.2') {
+  testImplementation('org.wiremock:wiremock:3.2.0') {
         exclude group: 'org.eclipse.jetty', module: 'jetty-servlet'
     }
     testImplementation 'org.hamcrest:hamcrest:2.2'

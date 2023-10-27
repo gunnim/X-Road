@@ -60,10 +60,10 @@ import ee.ria.xroad.proxy.util.ServerConfStatsLogger;
 import ee.ria.xroad.signer.protocol.RpcSignerClient;
 
 import io.grpc.BindableService;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.niis.xroad.common.rpc.server.RpcServer;

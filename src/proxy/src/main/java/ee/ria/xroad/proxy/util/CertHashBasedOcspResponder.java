@@ -38,6 +38,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.cert.ocsp.OCSPResp;
 import org.eclipse.jetty.server.HttpConnectionFactory;
 import org.eclipse.jetty.server.Request;
+import org.eclipse.jetty.server.SecureRequestCustomizer;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.AbstractHandler;
@@ -51,6 +52,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Service responsible for responding with OCSP responses of SSL certificates identified with the certificate hashes.
@@ -109,8 +111,15 @@ public class CertHashBasedOcspResponder implements StartStop {
         ocspConnector.setPort(SystemProperties.getOcspResponderPort());
         ocspConnector.setHost(host);
         ocspConnector.getConnectionFactories().stream()
-                .filter(cf -> cf instanceof HttpConnectionFactory)
-                .forEach(httpCf -> ((HttpConnectionFactory) httpCf).getHttpConfiguration().setSendServerVersion(false));
+                .filter(HttpConnectionFactory.class::isInstance)
+                .map(HttpConnectionFactory.class::cast)
+                .forEach(httpCf -> {
+                    httpCf.getHttpConfiguration().setSendServerVersion(false);
+                    Optional.ofNullable(httpCf.getHttpConfiguration().getCustomizer(SecureRequestCustomizer.class))
+                            .ifPresent(customizer -> {
+                                customizer.setSniHostCheck(false);
+                            });
+                });
 
         server.addConnector(ocspConnector);
     }

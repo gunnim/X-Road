@@ -324,13 +324,13 @@ public class RestProxyTest extends AbstractProxyIntegrationTest {
                 .baseUri("http://127.0.0.1")
                 .port(proxyClientPort)
                 .header("Content-Type", "application/json")
-                .header("Accept", "application/json")
+                .header("Accept", "application/json;charset=utf-8")
                 .header("X-Road-Client", "EE/BUSINESS/consumer/subsystem")
                 .get(PREFIX + "/EE/BUSINESS/producer/sub/wsdl")
                 .then()
                 .statusCode(Matchers.is(500))
                 .header("X-Road-Error", Matchers.notNullValue())
-                .header("Content-Type", "application/json;charset=utf-8");
+                .header("Content-Type", "application/json");
 
         given()
                 .baseUri("http://127.0.0.1")
@@ -342,7 +342,7 @@ public class RestProxyTest extends AbstractProxyIntegrationTest {
                 .then()
                 .statusCode(Matchers.is(500))
                 .header("X-Road-Error", Matchers.notNullValue())
-                .header("Content-Type", "application/json;charset=utf-8");
+                .header("Content-Type", "application/json");
 
         given()
                 .baseUri("http://127.0.0.1")
@@ -353,7 +353,7 @@ public class RestProxyTest extends AbstractProxyIntegrationTest {
                 .then()
                 .statusCode(Matchers.is(500))
                 .header("X-Road-Error", Matchers.notNullValue())
-                .header("Content-Type", "application/json;charset=utf-8");
+                .header("Content-Type", "application/json");
 
         given()
                 .baseUri("http://127.0.0.1")
@@ -413,7 +413,7 @@ public class RestProxyTest extends AbstractProxyIntegrationTest {
                 .then()
                 .statusCode(Matchers.is(500))
                 .header("X-Road-Error", Matchers.notNullValue())
-                .header("Content-Type", "application/json;charset=utf-8");
+                .header("Content-Type", "application/json");
 
         given()
                 .baseUri("http://127.0.0.1")

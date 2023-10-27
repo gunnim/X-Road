@@ -40,6 +40,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.eclipse.jetty.server.CustomRequestLog;
 import org.eclipse.jetty.server.HttpConnectionFactory;
+import org.eclipse.jetty.server.SecureRequestCustomizer;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.Slf4jRequestLogWriter;
@@ -51,6 +52,7 @@ import org.eclipse.jetty.xml.XmlConfiguration;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Optional;
 
 /**
  * Server proxy that handles requests of client proxies.
@@ -150,8 +152,15 @@ public class ServerProxy implements StartStop {
         connector.setIdleTimeout(SystemProperties.getServerProxyConnectorInitialIdleTime());
 
         connector.getConnectionFactories().stream()
-                .filter(cf -> cf instanceof HttpConnectionFactory)
-                .forEach(httpCf -> ((HttpConnectionFactory) httpCf).getHttpConfiguration().setSendServerVersion(false));
+                .filter(HttpConnectionFactory.class::isInstance)
+                .map(HttpConnectionFactory.class::cast)
+                .forEach(httpCf -> {
+                    httpCf.getHttpConfiguration().setSendServerVersion(false);
+                    Optional.ofNullable(httpCf.getHttpConfiguration().getCustomizer(SecureRequestCustomizer.class))
+                            .ifPresent(customizer -> {
+                                customizer.setSniHostCheck(false);
+                            });
+                });
 
         server.addConnector(connector);
 

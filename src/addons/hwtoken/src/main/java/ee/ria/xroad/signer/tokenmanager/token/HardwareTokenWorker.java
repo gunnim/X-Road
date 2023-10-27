@@ -57,8 +57,6 @@ import org.bouncycastle.operator.DefaultSignatureAlgorithmIdentifierFinder;
 import org.niis.xroad.signer.proto.ActivateTokenReq;
 import org.niis.xroad.signer.proto.GenerateKeyReq;
 
-import javax.xml.bind.DatatypeConverter;
-
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.security.PublicKey;

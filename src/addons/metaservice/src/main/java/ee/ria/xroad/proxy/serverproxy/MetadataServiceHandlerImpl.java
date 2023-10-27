@@ -48,11 +48,13 @@ import ee.ria.xroad.common.util.XmlUtils;
 import ee.ria.xroad.proxy.common.WsdlRequestData;
 import ee.ria.xroad.proxy.protocol.ProxyMessage;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBElement;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
 import jakarta.xml.bind.Unmarshaller;
+import jakarta.xml.soap.SOAPMessage;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -70,9 +72,7 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.ext.DefaultHandler2;
 import org.xml.sax.ext.LexicalHandler;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.xml.XMLConstants;
-import javax.xml.soap.SOAPMessage;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.sax.SAXTransformerFactory;

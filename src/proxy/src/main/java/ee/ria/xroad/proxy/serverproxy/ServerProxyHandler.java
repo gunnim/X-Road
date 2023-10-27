@@ -126,7 +126,7 @@ class ServerProxyHandler extends HandlerBase {
     }
 
     private static X509Certificate[] getClientSslCertChain(HttpServletRequest request) {
-        Object attribute = request.getAttribute("javax.servlet.request.X509Certificate");
+        Object attribute = request.getAttribute("jakarta.servlet.request.X509Certificate");
 
         if (attribute != null) {
             return (X509Certificate[]) attribute;

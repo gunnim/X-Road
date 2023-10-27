@@ -25,28 +25,28 @@
  */
 package org.niis.xroad.restapi.auth.securityconfigurer;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.niis.xroad.restapi.auth.PamAuthenticationProvider;
 import org.niis.xroad.restapi.controller.CommonModuleEndpointPaths;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.LazyCsrfTokenRepository;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * basic authentication configuration for managing api keys
  * matching url /api/api-keys/**
  */
 @Configuration
-@Order(MultiAuthWebSecurityConfig.API_KEY_MANAGEMENT_SECURITY_ORDER)
-public class ManageApiKeysWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
+public class ManageApiKeysWebSecurityConfig {
 
     @Autowired
     @Qualifier(PamAuthenticationProvider.KEY_MANAGEMENT_PAM_AUTHENTICATION)
@@ -55,36 +55,31 @@ public class ManageApiKeysWebSecurityConfigurerAdapter extends WebSecurityConfig
     @Autowired
     private CommonModuleEndpointPaths commonModuleEndpointPaths;
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
-            .antMatcher(commonModuleEndpointPaths.getApiKeysPath() + "/**")
-            .authorizeRequests()
-                .anyRequest()
-                .authenticated()
-                .and()
-            .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.NEVER)
-                .and()
-            .httpBasic()
-                .and()
-            .anonymous()
-                .disable()
-            .headers()
-                .contentSecurityPolicy("default-src 'none'")
-                .and()
-                .and()
-            .csrf()
-                .requireCsrfProtectionMatcher(ManageApiKeysWebSecurityConfigurerAdapter::sessionExists)
-                .csrfTokenRepository(new LazyCsrfTokenRepository(new CookieAndSessionCsrfTokenRepository()))
-                .and()
-            .formLogin()
-                .disable();
-    }
-
-    @Override
-    protected void configure(AuthenticationManagerBuilder builder) throws Exception {
-        builder.authenticationProvider(authenticationProvider);
+    @Bean
+    @Order(MultiAuthWebSecurityConfig.API_KEY_MANAGEMENT_SECURITY_ORDER)
+    public SecurityFilterChain manageApiSecurityFilterChain(HttpSecurity http) throws Exception {
+        return http
+                .securityMatcher(commonModuleEndpointPaths.getApiKeysPath() + "/**")
+                .authenticationProvider(authenticationProvider)
+                .authorizeHttpRequests(customizer -> customizer
+                        .anyRequest()
+                        .authenticated()
+                )
+                .sessionManagement(customizer -> customizer
+                        .sessionCreationPolicy(SessionCreationPolicy.NEVER)
+                )
+                .httpBasic(Customizer.withDefaults())
+                .anonymous(AbstractHttpConfigurer::disable)
+                .headers(customizer -> customizer
+                        .contentSecurityPolicy(csCustomizer -> csCustomizer
+                                .policyDirectives("default-src 'none'"))
+                )
+                .csrf(customizer -> customizer
+                        .requireCsrfProtectionMatcher(ManageApiKeysWebSecurityConfig::sessionExists)
+                        .csrfTokenRepository(new LazyCsrfTokenRepository(new CookieAndSessionCsrfTokenRepository()))
+                )
+                .formLogin(AbstractHttpConfigurer::disable)
+                .build();
     }
 
     /**

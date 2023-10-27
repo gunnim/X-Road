@@ -35,11 +35,10 @@ import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBElement;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
+import jakarta.xml.soap.SOAPException;
 import lombok.extern.slf4j.Slf4j;
 import org.niis.xroad.common.managementrequest.model.ManagementRequestType;
 import org.w3c.dom.Node;
-
-import javax.xml.soap.SOAPException;
 
 import java.io.UnsupportedEncodingException;
 

@@ -178,7 +178,7 @@ abstract class AbstractClientProxyHandler extends HandlerBase {
     }
 
     static IsAuthenticationData getIsAuthenticationData(HttpServletRequest request) {
-        X509Certificate[] certs = (X509Certificate[]) request.getAttribute("javax.servlet.request.X509Certificate");
+        X509Certificate[] certs = (X509Certificate[]) request.getAttribute("jakarta.servlet.request.X509Certificate");
 
         return new IsAuthenticationData(certs != null && certs.length != 0 ? certs[0] : null,
                 !"https".equals(request.getScheme())); // if not HTTPS, it's plaintext

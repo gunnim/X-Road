@@ -30,7 +30,8 @@ dependencies {
     implementation('org.springframework.boot:spring-boot-starter-data-jpa')
     implementation("org.springframework.boot:spring-boot-starter-cache")
     implementation("org.springframework.boot:spring-boot-starter-validation")
-    implementation('io.micrometer:micrometer-tracing')
+  implementation("org.springframework.boot:spring-boot-starter-actuator")
+  implementation('io.micrometer:micrometer-tracing-bridge-brave')
     implementation('org.kohsuke:libpam4j:1.11')
     implementation("io.swagger.parser.v3:swagger-parser-v3:$swaggerParserVersion")
     implementation("io.swagger.core.v3:swagger-annotations:$swaggerAnnotationsVersion")
@@ -73,6 +74,7 @@ openApiGenerate {
         generateSupportingFiles: "false"
     ]
     configOptions = [
+      useJakartaEe: "true",
         interfaceOnly: "true",
         useTags      : "true",
         documentationProvider  : "none",

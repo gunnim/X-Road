@@ -32,6 +32,10 @@ import ee.ria.xroad.common.util.MimeUtils;
 import jakarta.xml.bind.JAXBElement;
 import jakarta.xml.bind.Unmarshaller;
 import jakarta.xml.bind.ValidationEvent;
+import jakarta.xml.soap.SOAPElement;
+import jakarta.xml.soap.SOAPFault;
+import jakarta.xml.soap.SOAPHeader;
+import jakarta.xml.soap.SOAPMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.BOMInputStream;
@@ -39,10 +43,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.glassfish.jaxb.runtime.api.AccessorException;
 
 import javax.xml.namespace.QName;
-import javax.xml.soap.SOAPElement;
-import javax.xml.soap.SOAPFault;
-import javax.xml.soap.SOAPHeader;
-import javax.xml.soap.SOAPMessage;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;

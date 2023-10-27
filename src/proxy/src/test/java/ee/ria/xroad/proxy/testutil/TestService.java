@@ -33,12 +33,15 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpStatus;
+import org.eclipse.jetty.server.HttpConnectionFactory;
 import org.eclipse.jetty.server.Request;
+import org.eclipse.jetty.server.SecureRequestCustomizer;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 
 import java.io.IOException;
+import java.util.Optional;
 
 import static ee.ria.xroad.common.ErrorCodes.translateException;
 
@@ -81,6 +84,15 @@ public class TestService implements StartStop {
         connector.setName("dummy-rest-service");
         connector.setHost("127.0.0.1");
         connector.setPort(port);
+        connector.getConnectionFactories().stream()
+                .filter(HttpConnectionFactory.class::isInstance)
+                .map(HttpConnectionFactory.class::cast)
+                .forEach(httpCf -> {
+                    Optional.ofNullable(httpCf.getHttpConfiguration().getCustomizer(SecureRequestCustomizer.class))
+                            .ifPresent(customizer -> {
+                                customizer.setSniHostCheck(false);
+                            });
+                });
         server.addConnector(connector);
     }
 
