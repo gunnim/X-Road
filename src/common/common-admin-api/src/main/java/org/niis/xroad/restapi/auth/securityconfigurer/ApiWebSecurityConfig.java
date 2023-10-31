@@ -38,6 +38,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.preauth.RequestHeaderAuthenticationFilter;
+import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.security.web.csrf.LazyCsrfTokenRepository;
 import org.springframework.security.web.savedrequest.NullRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
@@ -65,6 +66,9 @@ public class ApiWebSecurityConfig {
         filter.setExceptionIfHeaderMissing(false); // exception at this point
         // would cause http 500, we want http 401
 
+        var requestHandler = new CsrfTokenRequestAttributeHandler();
+        // #SpringBoot3 to restore previous CSRF token behaviour
+        requestHandler.setCsrfRequestAttributeName(null);
         return http
                 .securityMatcher("/api/**")
                 .addFilter(filter)
@@ -72,6 +76,7 @@ public class ApiWebSecurityConfig {
                 .authorizeHttpRequests(customizer -> customizer.anyRequest().authenticated())
                 .exceptionHandling(customizer -> customizer.authenticationEntryPoint(http401AuthenticationEntryPoint))
                 .csrf(customizer -> customizer
+                        .csrfTokenRequestHandler(requestHandler)
                         // we require csrf protection only if there is a session alive
                         .requireCsrfProtectionMatcher(ApiWebSecurityConfig::sessionExists)
                         // CsrfFilter always generates a new token in the repo -> prevent with lazy

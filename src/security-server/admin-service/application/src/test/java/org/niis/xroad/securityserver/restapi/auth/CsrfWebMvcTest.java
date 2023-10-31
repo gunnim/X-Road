@@ -100,9 +100,9 @@ public class CsrfWebMvcTest {
         Set<GrantedAuthority> authorities = grantedAuthorityMapper
                 .getAuthorities(Collections.singletonList(Role.XROAD_SECURITYSERVER_OBSERVER));
         userPermissions = authorities.stream()
-                .filter(grantedAuthority -> !grantedAuthority.getAuthority()
-                        .equals(Role.XROAD_SECURITYSERVER_OBSERVER.getGrantedAuthorityName()))
                 .map(GrantedAuthority::getAuthority)
+                .filter(authority -> !authority
+                        .equals(Role.XROAD_SECURITYSERVER_OBSERVER.getGrantedAuthorityName()))
                 .collect(Collectors.toSet());
         Authentication mockAuth = new UsernamePasswordAuthenticationToken(username, "pass", authorities);
         SecurityContext securityContext = SecurityContextHolder.getContext();

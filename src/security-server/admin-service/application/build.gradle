@@ -31,7 +31,9 @@ dependencies {
     implementation project(":common:common-verifier")
     implementation project(":security-server:openapi-model")
 
-    implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.springframework.boot:spring-boot-starter-security"){
+
+    }
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-cache")
@@ -49,8 +51,7 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
     testImplementation("org.hsqldb:hsqldb:$hsqldbVersion")
-    testImplementation("org.springframework.cloud:spring-cloud-contract-wiremock:3.1.2")
-    testImplementation("com.github.tomakehurst:wiremock-jre8-standalone:2.33.2")
+    testImplementation("org.springframework.cloud:spring-cloud-contract-wiremock:4.0.3")
     testImplementation(testFixtures(project(":common:common-api-throttling")))
     testRuntimeOnly("org.junit.vintage:junit-vintage-engine")
 }

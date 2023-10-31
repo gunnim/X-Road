@@ -27,11 +27,12 @@
 
 package org.niis.xroad.restapi.auth.securityconfigurer;
 
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.niis.xroad.restapi.config.audit.AuditEventLoggingFacade;
-import org.niis.xroad.restapi.util.UsernameHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -48,6 +49,10 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationFa
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.csrf.CsrfToken;
+import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
@@ -70,14 +75,14 @@ public class FormLoginWebSecurityConfig {
     private AuthenticationProvider authenticationProvider;
 
     @Autowired
-    private UsernameHelper usernameHelper;
-
-    @Autowired
     private AuditEventLoggingFacade auditEventLoggingFacade;
 
     @Bean
     @Order(MultiAuthWebSecurityConfig.FORM_LOGIN_SECURITY_ORDER)
     public SecurityFilterChain formLoginSecurityFilterChain(HttpSecurity http) throws Exception {
+        CsrfTokenRequestAttributeHandler requestHandler = new CsrfTokenRequestAttributeHandler();
+        // #SpringBoot3 to restore previous CSRF token behaviour
+        requestHandler.setCsrfRequestAttributeName(null);
         return http
                 .authenticationProvider(authenticationProvider)
                 .authorizeHttpRequests(customizer -> customizer
@@ -88,6 +93,7 @@ public class FormLoginWebSecurityConfig {
                         .anyRequest().denyAll()
                 )
                 .csrf(customizer -> customizer
+                        .csrfTokenRequestHandler(requestHandler)
                         .ignoringRequestMatchers(LOGIN_URL)
                         .csrfTokenRepository(new CookieAndSessionCsrfTokenRepository())
                 )
@@ -104,6 +110,7 @@ public class FormLoginWebSecurityConfig {
                         .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler())
                         .addLogoutHandler(new AuditLoggingLogoutHandler())
                         .permitAll())
+                .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
                 .build();
     }
 
@@ -148,5 +155,19 @@ public class FormLoginWebSecurityConfig {
                 response.getWriter().println("OK");
             }
         };
+    }
+
+
+    private static final class CsrfCookieFilter extends OncePerRequestFilter {
+
+        @Override
+        protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+                throws ServletException, IOException {
+            CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+            // Render the token value to a cookie by causing the deferred token to be loaded
+            csrfToken.getToken();
+
+            filterChain.doFilter(request, response);
+        }
     }
 }
