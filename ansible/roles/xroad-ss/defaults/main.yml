@@ -6,4 +6,5 @@ variant: vanilla
 #pulls other packages through dependencies. Variant denoted by the string after the last "_".
 xroad_varpkg_fi: xroad-securityserver-fi
 xroad_varpkg_ee: xroad-securityserver-ee
+xroad_varpkg_is: xroad-securityserver-is
 xroad_varpkg_vanilla: xroad-securityserver
